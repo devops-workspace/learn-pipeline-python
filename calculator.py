@@ -1,4 +1,5 @@
 import math
+import random
 from abc import ABC
 
 class Calculator(ABC):
@@ -53,7 +54,119 @@ class EngelsCoefficientCalculator(Calculator):
         self.investment = float(input('Please input your investment spend:'))
         self.unexpected = float(input('Please input your unexpected spend:'))
 
-handlers = [CircleAreaCalculator(), RectangleAreaCalculator(), RightTriangleCalculator(), EngelsCoefficientCalculator()]
+class BMICalculator(Calculator):
+    def calculate_area(self):
+        val = self.weight / (self.height * self.height)
+        print(f'Your BMI is: {val:.2f}')
+        if val >= 30:
+            print('You are too heavy')
+        elif val >= 25 and val < 30:
+            print('You are overweight')
+        elif val >= 18.5 and val < 25:
+            print('You are normal')
+        else:
+            print('You are not overweight')
+    def name(self):
+        return 'BMI'
+    def input(self):
+        self.weight = float(input('Please input your weight:'))
+        self.height = float(input('Please input your height:'))
+
+class CollatzCalculator(Calculator):
+    def calculate_area(self):
+        num = self.number
+        while num != 1:
+            if num % 2 == 0:
+                num = num // 2
+            else:
+                num = num * 3 + 1
+            print(num)
+            if num == 1:
+                break
+    def name(self):
+        return 'Collatz'
+    def input(self):
+        self.number = int(input('Please input a number:'))
+
+class GuessNumber(Calculator):
+    def calculate_area(self):
+        randomNum = random.randint(1, 100)
+        times = 0
+        for i in range(self.times):
+            number = int(input('Please input a number:'))
+            times += 1
+            if number == randomNum:
+                print(f'You guess the number with {times} times!')
+                break
+            elif number > randomNum:
+                print('Your number is too big')
+            else:
+                print('Your number is too small')
+    def name(self):
+        return 'Guess Number'
+    def input(self):
+        print('Please guess the number which between 1 and 100')
+        self.times = int(input('Please input the guess time limit:'))
+
+class MultiTable(Calculator):
+    def calculate_area(self):
+        for i in range(1, 10):
+            for j in range(1, i+1):
+                print(f'{j} * {i} = {i * j}', end = '\t')
+            print('')
+    def name(self):
+        return 'Multi Table'
+    def input(self):
+        pass
+
+class Boat(Calculator):
+    def calculate_area(self):
+        print(f'Our location is {self.location}')
+        print(f'We have {self.weapon} weapons and engines status is {self.engine} and {self.fuel} fuel')
+
+        while True:
+            action = input('Please choose the action [go, shoot, fuel, motor, exit]:')
+            if action == 'go':
+                if self.engine and self.fuel > 0:
+                    print('You go!')
+                    self.fuel -= 0.1
+                else:
+                    print('You can not go!')
+            elif action == 'shoot':
+                if self.weapon > 0:
+                    self.weapon -= 1
+                    print('You shoot the enemy!')
+                else:
+                    print('You have no weapon!')
+            elif action == 'fuel':
+                print(f'Your fuel is {self.fuel}')
+            elif action =='motor':
+                print(f'Your engine status is {self.engine}')
+            elif action == 'exit':
+                print('You exit the game!')
+                break
+            else:
+                print('Please input a valid action!')
+    def name(self):
+        return 'Boat'
+    def input(self):
+        while True:
+            username = input('Please input your name:')
+            password = input('Please input your password:')
+            if username == 'admin' and password == '123456':
+                break
+            else:
+                print('Wrong username or password!')
+        print('Welcome aboard!')
+        self.location = 'Earth'
+        self.weapon = 10
+        self.engine = True
+        self.fuel = 0.9
+
+handlers = [CircleAreaCalculator(), RectangleAreaCalculator(),
+            RightTriangleCalculator(), EngelsCoefficientCalculator(),
+            BMICalculator(), CollatzCalculator(), GuessNumber(),
+            MultiTable(), Boat()]
 for handler in handlers:
     print(handlers.index(handler), handler.name())
 
